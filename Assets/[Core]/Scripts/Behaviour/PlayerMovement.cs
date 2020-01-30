@@ -53,6 +53,8 @@ namespace Core
             _player = GetComponent<PlayerInput>();
 
             _animator = GetComponentInChildren<Animator>();
+
+            _player.camera.transform.parent = null;
         }
 
         private void OnEnable()
