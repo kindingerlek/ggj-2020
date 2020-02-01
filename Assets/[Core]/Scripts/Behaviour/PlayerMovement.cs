@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Tools.DebugDraw;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
@@ -10,7 +11,7 @@ namespace Core
 {
     [SelectionBase]
     [RequireComponent(
-        typeof(CharacterController),
+        typeof(Rigidbody),
         typeof(PlayerInput)
     )]
     public class PlayerMovement : MonoBehaviour
@@ -19,25 +20,27 @@ namespace Core
         [SerializeField] private float gravity = -30f;
 
         [Header("MOVEMENT")]
-        [SerializeField] private float speed = 5f;
+        [SerializeField] private float deccl = 15f;
+        [SerializeField] private float speed = 8f;
         [SerializeField] private float jumpHeight = 1f;
         [SerializeField] private float dashDistance = 5f;
+        [SerializeField] private float dashSpeedMultiplier;
         [SerializeField] private float rotationSpeed = 10f;
 
-        private const float RELEASE_GROUND_GRACETIME = 0.20f;
 
         // LOGIC
         private bool _isGrounded = true;
         private Vector3 _moveDirection;
         private Vector3 _velocity;
-        private float _releaseGroundTime;
 
         // COMPONENTS
         private Animator _animator;
         private PlayerInput _player;
         private PlayerControls _controls;
-        private CharacterController _character;
+        private Rigidbody _rigidbody;
         private bool _isJumping;
+        private bool _inDash;
+        private bool _recoveringFromDash;
 
 
         #region Properties
@@ -49,7 +52,7 @@ namespace Core
         private void Awake()
         {
             _controls = new PlayerControls();
-            _character = GetComponent<CharacterController>();
+            _rigidbody = GetComponent<Rigidbody>();
             _player = GetComponent<PlayerInput>();
 
             _animator = GetComponentInChildren<Animator>();
@@ -77,33 +80,98 @@ namespace Core
             Debug.Log("Device Regained");
         }
 
+        private void OnCollisionStay(Collision collision)
+        {
+            _isGrounded = true;
+        }
+
         private void OnMove(InputValue value)
         {
             // Move and look inputs
             _moveDirection = ProjectInputToCamera(value.Get<Vector2>());
-
-            _velocity.x = (_moveDirection * speed).x;
-            _velocity.z = (_moveDirection * speed).z;
         }
 
         private void OnJump(InputValue value)
         {
             _isJumping = value.isPressed;
 
-            if (_isJumping)
+            if (_isJumping && _isGrounded)
                 StartCoroutine(JumpCoroutine());
             else
                 StopCoroutine(JumpCoroutine());
         }
+        
+        private void OnDash(InputValue value)
+        {
+            if (_inDash || _recoveringFromDash)
+                return;
+            StartCoroutine(DashCoroutine());
+        }
 
+
+        private void UpdateAnimator()
+        {
+            _animator.SetBool("IsGrounded", _isGrounded);
+            _animator.SetFloat("ForwardSpeed", _moveDirection.magnitude);
+        }
+
+        private void Update()
+        {
+            DebugDraw.Line(transform.position, transform.position + _moveDirection).Color = Color.magenta;
+            DebugDraw.Line(transform.position, transform.position + _velocity.normalized).Color = Color.cyan;
+        }
+
+        // Update is called once per frame
+        private void FixedUpdate()
+        {
+            var xzVel = _rigidbody.velocity;
+            xzVel.y = 0;
+
+            // Manage verical speed
+            if (_isGrounded && _velocity.y < 0)
+                _velocity.y = 0f;
+
+            // Apply Gravity
+            _velocity.y += gravity * Time.fixedDeltaTime;
+
+
+            if (!_inDash)
+            {
+                if (_moveDirection != Vector3.zero)
+                {
+                    _velocity.x = (_moveDirection * speed).x;
+                    _velocity.z = (_moveDirection * speed).z;
+                }
+                else
+                {
+                    if (xzVel.magnitude >= 0)
+                        _velocity -= (xzVel.normalized * deccl) * Time.fixedDeltaTime;
+
+                }
+
+                if (!_inDash && xzVel.magnitude >= speed)
+                {
+                    xzVel = xzVel.normalized * speed;
+                    xzVel.y = _velocity.y;
+                    _velocity = xzVel;
+                }
+
+                transform.rotation = GetRotationTowardsMovement(_moveDirection.normalized); 
+            }
+
+            UpdateAnimator();
+
+            _isGrounded = false;
+            _rigidbody.velocity = _velocity;
+        }
+        #region Coroutines
         private IEnumerator JumpCoroutine()
         {
             _velocity.y = 0;
-            _releaseGroundTime = -1f;
 
             if (_isGrounded)
                 _velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-            
+
             // Skip one update cycle
             yield return null;
 
@@ -120,38 +188,33 @@ namespace Core
             yield break;
         }
 
-        private void OnDash(InputValue value)
+        private IEnumerator DashCoroutine()
         {
             Debug.Log("Dash");
-        }
+            _inDash = true;
+            var dashTime = (dashDistance / (speed * dashSpeedMultiplier));
+            float recoverTime = 3f;
 
-        private void UpdateAnimator()
-        {
-            _animator.SetBool("IsGrounded", _isGrounded);
-            _animator.SetFloat("ForwardSpeed", _moveDirection.magnitude);
-        }
-
-        // Update is called once per frame
-        private void Update()
-        {
-            // Manage verical speed
-            if (_character.isGrounded && _velocity.y < 0)
+            var auxVel = _velocity;
+            while ((dashTime -= Time.deltaTime) > 0)
             {
-                _velocity.y = 0f;
-                _releaseGroundTime = RELEASE_GROUND_GRACETIME;
+                auxVel = _velocity;
+                auxVel.y = 0;
+
+                auxVel = auxVel.normalized * (speed * dashSpeedMultiplier);
+                auxVel.y = _velocity.y;
+
+                _velocity = auxVel;
+                yield return null;
             }
+            _inDash = false;
 
-            // Apply Gravity
-            _velocity.y += gravity * Time.deltaTime;
-            
-            // Move and Rotate the character
-            _character.Move(_velocity * Time.deltaTime);
-            transform.rotation = GetRotationTowardsMovement(_moveDirection.normalized);
-
-            UpdateAnimator();
-
-            _isGrounded = _character.isGrounded || ((_releaseGroundTime -= Time.deltaTime) > 0);
+            _recoveringFromDash = true;
+            while ((recoverTime -= Time.deltaTime) > 0)
+                yield return null;
+            _recoveringFromDash = false;
         }
+        #endregion
 
         private Quaternion GetRotationTowardsMovement(Vector3 lookDirection)
         {

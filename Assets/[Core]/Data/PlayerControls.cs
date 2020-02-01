@@ -25,7 +25,7 @@ namespace Core.Input
                     ""type"": ""Value"",
                     ""id"": ""98698bfa-561d-4bf5-8710-3490ecce8cf8"",
                     ""expectedControlType"": ""Vector2"",
-                    ""processors"": ""NormalizeVector2"",
+                    ""processors"": ""NormalizeVector2,StickDeadzone(min=0.225)"",
                     ""interactions"": """"
                 },
                 {
@@ -59,7 +59,7 @@ namespace Core.Input
                     ""id"": ""b5bac7ba-8825-4e31-aa5c-902b9b3361c1"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
-                    ""processors"": ""NormalizeVector2"",
+                    ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": true,
@@ -114,7 +114,7 @@ namespace Core.Input
                     ""id"": ""b9eccf95-dbfc-4709-af4e-b18fe08bb5b1"",
                     ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
-                    ""processors"": ""NormalizeVector2"",
+                    ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": false,
