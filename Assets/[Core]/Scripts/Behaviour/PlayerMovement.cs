@@ -57,7 +57,7 @@ namespace Core
 
         private void OnEnable()
         {
-            if(_controls != null)
+            if (_controls != null)
                 _controls.Enable();
 
         }
@@ -121,7 +121,7 @@ namespace Core
         }
 
         private void OnDash(InputValue value)
-        {            
+        {
             Debug.Log("Dash");
         }
 
@@ -173,7 +173,7 @@ namespace Core
 
             if (PlayerInputManager.instance.splitScreen)
                 cameraRotation = _player.camera.transform.rotation;
-            
+
             // Calculate camera direction and rotation on the character plane
             Vector3 cameraPlanarDirection = Vector3.ProjectOnPlane(cameraRotation * Vector3.forward, transform.up).normalized;
 
