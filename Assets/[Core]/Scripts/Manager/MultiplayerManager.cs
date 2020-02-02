@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 public class MultiplayerManager : MonoBehaviour
 {
     //PlayerInputManager inputManager;
-
+    public List<PlayerInput> players;
     private void OnPlayerJoined(PlayerInput player)
     {
         var playerSpawn = GameManager.Instance.playerData;
@@ -23,11 +23,17 @@ public class MultiplayerManager : MonoBehaviour
 
         player.gameObject.transform.position = playerSpawn[player.playerIndex].transform.position;
 
+        player.DeactivateInput();
+        GameManager.Instance.playersInputs.Add(player);
+        
         Debug.Log($"New Player Joined!");
     }
 
-    private void OnPlayerLeft()
+    private void OnPlayerLeft(PlayerInput player)
     {
+        GameManager.Instance.playersInputs.Remove(player);
+
         Debug.Log($"Player Left!");
+
     }
 }
