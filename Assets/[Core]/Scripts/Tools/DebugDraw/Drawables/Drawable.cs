@@ -37,11 +37,14 @@ namespace Tools.DebugDraw.Drawables
         protected abstract void OnDraw();
         public void Draw()
         {
-            if(!EditorApplication.isPaused)
-                Active = Mathf.Clamp((currentLifeTime -= Time.deltaTime),0, LifeTime) > 0;
-
             Gizmos.color = Color;
             OnDraw();
+        }
+
+        public void Update()
+        {
+            if (!EditorApplication.isPaused)
+                Active = Mathf.Clamp((currentLifeTime -= Time.deltaTime), 0, LifeTime) > 0;
         }
     }
 }

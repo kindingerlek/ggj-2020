@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 731a0ce854b6ec84a9ef5d9b0471dc60
+guid: c20ca02f89f68c34d9a257ea971087cf
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -11,4 +11,4 @@ ScriptedImporter:
   generateWrapperCode: 1
   wrapperCodePath: 
   wrapperClassName: 
-  wrapperCodeNamespace: Core.Input
+  wrapperCodeNamespace: 

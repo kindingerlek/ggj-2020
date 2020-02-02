@@ -1,11 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
+//using UnityEngine.InputSystem;
 
 public class MultiplayerManager : MonoBehaviour
 {
-    PlayerInputManager inputManager;
+    //PlayerInputManager inputManager;
 
     private void OnPlayerJoined()
     {
