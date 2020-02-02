@@ -41,6 +41,7 @@ public class Grabbable : MonoBehaviour
                 this.transform.position += Vector3.up * 0.5f;                
                 att.joint = this.gameObject.AddComponent<FixedJoint>();
                 att.joint.connectedBody = att.player.GetComponent<Rigidbody>();
+                //att.joint.anchor = att.player.transform.forward;
                 
                 Debug.Log($"Attaching Joint to {att.player.transform.name}");
 
@@ -99,10 +100,7 @@ public class Grabbable : MonoBehaviour
 
     public bool AllPlayersConnect
     {
-        get
-        {
-            return playerAttaches[0].player != null && playerAttaches[1].player != null; 
-        }
+        get => playerAttaches[0].player != null && playerAttaches[1].player != null; 
     }
 
     public void Respawn()
@@ -124,6 +122,9 @@ public class Grabbable : MonoBehaviour
 
         playerAttaches[0].joint = null;
         playerAttaches[1].joint = null;
+
+        playerAttaches[0].player = null;
+        playerAttaches[1].player = null;
 
 
         transform.position = new Vector3(randomPos.x, 5f, randomPos.y);

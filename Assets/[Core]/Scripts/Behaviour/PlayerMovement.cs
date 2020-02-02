@@ -126,6 +126,8 @@ namespace Core
         
         private void OnDash(InputValue value)
         {
+            return;
+
             if (_inDash || _recoveringFromDash)
                 return;
             StartCoroutine(DashCoroutine());
@@ -164,7 +166,13 @@ namespace Core
             _velocity.y += gravity * Time.fixedDeltaTime;
 
 
-            var currentSpeed = grabbable != null && !grabbable.AllPlayersConnect ?  speedWhenGrabbing : speed;
+            var currentSpeed = speed;
+
+            if (grabbable != null) {
+                //Debug.Log("All players connecting: " + grabbable.AllPlayersConnect + " speed " + currentSpeed);
+                currentSpeed = grabbable != null && !grabbable.AllPlayersConnect ? speedWhenGrabbing : speed * 2;
+            }
+
 
             if (!_inDash)
             {
@@ -187,7 +195,7 @@ namespace Core
                     _velocity = xzVel;
                 }
 
-                transform.rotation = GetRotationTowardsMovement(_moveDirection.normalized); 
+                transform.rotation = GetRotationTowardsMovement(_moveDirection.normalized);
             }
 
             UpdateAnimator();
