@@ -71,9 +71,9 @@ MonoBehaviour:
   gravity: -30
   deccl: 15
   speed: 5
-  speedWhenGrabbing: 2
+  speedWhenGrabbing: 4
   jumpHeight: 1
-  dashDistance: 5
+  dashDistance: 4
   dashSpeedMultiplier: 3
   rotationSpeed: 10
 --- !u!114 &7476572250441761098

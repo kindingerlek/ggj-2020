@@ -20,12 +20,7 @@ public class Grabbable : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        MeshRenderer meshRenderer = GetComponentInChildren<MeshRenderer>();
-        var mat_1 = meshRenderer.materials[1];
-        var mat_2 = meshRenderer.materials[2];
-
-        mat_1.SetColor("_BaseColor", GameManager.Instance.playerData[playersIndexes[0]].Color);
-        mat_2.SetColor("_BaseColor", GameManager.Instance.playerData[playersIndexes[1]].Color);
+        Respawn();
     }
 
     // Update is called once per frame
@@ -105,4 +100,23 @@ public class Grabbable : MonoBehaviour
         }
     }
 
+    public void Respawn()
+    {
+        var randomPos = Random.insideUnitCircle * 9;
+
+        if (randomPos.magnitude < 2f)
+            randomPos = randomPos.normalized * 2f;
+
+        MeshRenderer meshRenderer = GetComponentInChildren<MeshRenderer>();
+        var mat_1 = meshRenderer.materials[1];
+        var mat_2 = meshRenderer.materials[2];
+
+        mat_1.SetColor("_BaseColor", GameManager.Instance.playerData[playersIndexes[0]].Color);
+        mat_2.SetColor("_BaseColor", GameManager.Instance.playerData[playersIndexes[1]].Color);
+
+
+        transform.position = new Vector3(randomPos.x, 5f, randomPos.y);
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
+        return ;
+    }
 }

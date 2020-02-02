@@ -25,7 +25,6 @@ public class ObjectiveController : MonoBehaviour
 
 
         Debug.Log("ÉEEEE GOOOOOOOLLL!!!!");        
-        other.transform.position = GameManager.Instance.GetNewSpawnBallPosition();
-        other.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        other.GetComponent<Grabbable>().Respawn();
     }
 }

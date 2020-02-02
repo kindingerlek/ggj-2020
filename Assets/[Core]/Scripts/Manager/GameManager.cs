@@ -6,6 +6,13 @@ using Utils.Collection;
 
 public class GameManager : SingletonMonoBehaviour<GameManager>
 {
+    public int[,] combinations = new int[,]
+    {
+        { 0, 1, 2, 3 },
+        { 0, 2, 3, 1 },
+        { 0, 3, 1, 2 }
+    };
+
     [System.Serializable]
     public class PlayerSpawnPoint
     {
@@ -21,11 +28,13 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     public PlayerSpawnPoint[] playerData;
 
 
-    private GameObject[] Balls = new GameObject[4];
+    private GameObject[] Balls = new GameObject[2];
 
-    public List<PlayerSpawnPoint> team1;
-    public List<PlayerSpawnPoint> team2;
+    public List<int> team1;
+    public List<int> team2;
 
+
+    private int r;
 
 
     // Start is called before the first frame update
@@ -33,36 +42,29 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         Debug.Log("Start");
 
-        int[] pairs = Enumerable.Range(0, 4).Shuffle().ToArray();
+        r = Mathf.Clamp(Random.Range(0, 3), 0, 3);
 
-        for (int i = 0; i < Balls.Length; i++)
-        {
-            Balls[i] = Instantiate(prefabBall);
-            Balls[i].transform.position = GetNewSpawnBallPosition();
-            Balls[i].GetComponent<Grabbable>().playersIndexes = new int[] { i, (int) Mathf.Repeat(i+1,4) };
+        team1.Add(combinations[r,0]);
+        team1.Add(combinations[r,1]);
+        team2.Add(combinations[r,2]);
+        team2.Add(combinations[r,3]);
 
-        }
+        Balls[0] = Instantiate(prefabBall);
+        Balls[1] = Instantiate(prefabBall);
 
-        team1.Add(playerData[0]);
-        team1.Add(playerData[1]);
-        team2.Add(playerData[2]);
-        team2.Add(playerData[3]);
+        Balls[0].GetComponent<Grabbable>().playersIndexes = team1.ToArray();
+        Balls[1].GetComponent<Grabbable>().playersIndexes = team2.ToArray();
+
+        Balls[0].GetComponent<Grabbable>().Respawn();
+        Balls[1].GetComponent<Grabbable>().Respawn();
     }
 
-    public Vector3 GetNewSpawnBallPosition()
-    {
-        var randomPos = Random.insideUnitCircle * 9;
-
-        if (randomPos.magnitude < 2f)
-            randomPos = randomPos.normalized * 2f;
-
-        return new Vector3(randomPos.x, 5f, randomPos.y);
-    }
+   
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("Players :"+playerData.Length);
+
         UpdateTimeToPair();
     }
 
@@ -91,15 +93,26 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     }
 
     void GetaRandomTeam() {
-        var coinFlip = Random.Range(0, 2);        
-        PlayerSpawnPoint changedPLayer2 = team2[coinFlip];
-        PlayerSpawnPoint changedPLayer1 = team1[1];
-        team2.Remove(changedPLayer2);
-        team1.Remove(changedPLayer1);
-        team1.Add(changedPLayer2);
-        team2.Add(changedPLayer1);
-        Debug.Log("Random team cara:"+ coinFlip);
+        var aux = Mathf.Clamp(Random.Range(0, 3), 0,3) ;
 
+        while(aux == r)
+            aux = Mathf.Clamp(Random.Range(0, 3), 0, 3);
+
+        r = aux;
+
+        team1 = new List<int>();
+        team2 = new List<int>();
+
+        team1.Add(combinations[r, 0]);
+        team1.Add(combinations[r, 1]);
+        team2.Add(combinations[r, 2]);
+        team2.Add(combinations[r, 3]);
+
+        Balls[0].GetComponent<Grabbable>().playersIndexes = team1.ToArray();
+        Balls[1].GetComponent<Grabbable>().playersIndexes = team2.ToArray();
+
+        Balls[0].GetComponent<Grabbable>().Respawn();
+        Balls[1].GetComponent<Grabbable>().Respawn();
     }
 
 
