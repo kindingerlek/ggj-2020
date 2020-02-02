@@ -14,7 +14,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     public int timeToPair = 15;
     public float timeToPairRemaining = 15.0f;
 
-    public PlayerSpawnPoint[] SpawnPoints;
+    public PlayerSpawnPoint[] playerData;
+    
 
     // Start is called before the first frame update
     void Start()

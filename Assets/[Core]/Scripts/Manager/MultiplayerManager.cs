@@ -10,10 +10,12 @@ public class MultiplayerManager : MonoBehaviour
 
     private void OnPlayerJoined(PlayerInput player)
     {
-        var playerSpawn = GameManager.Instance.SpawnPoints;
+        var playerSpawn = GameManager.Instance.playerData;
 
-        var mat = player.GetComponentInChildren<SkinnedMeshRenderer>().material;
-        mat.SetColor("_BaseColor", playerSpawn[player.playerIndex].Color);
+        //var mat = player.GetComponentInChildren<SkinnedMeshRenderer>().material;
+        //mat.SetColor("_BaseColor", playerSpawn[player.playerIndex].Color);
+
+        var outline = player.GetComponent<Outline>().OutlineColor = playerSpawn[player.playerIndex].Color;
 
         player.gameObject.transform.position = playerSpawn[player.playerIndex].transform.position;
 

@@ -15,12 +15,17 @@ public class Grabbable : MonoBehaviour
     }
 
     private playerAttach[] playerAttaches = new playerAttach[2];
-    private int[] playersIndexes = { 0, 1 };
+    private int[] playersIndexes = { 0, 3 };
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        MeshRenderer meshRenderer = GetComponentInChildren<MeshRenderer>();
+        var mat_1 = meshRenderer.materials[1];
+        var mat_2 = meshRenderer.materials[2];
+
+        mat_1.SetColor("_BaseColor", GameManager.Instance.playerData[playersIndexes[0]].Color);
+        mat_2.SetColor("_BaseColor", GameManager.Instance.playerData[playersIndexes[1]].Color);
     }
 
     // Update is called once per frame
@@ -34,6 +39,7 @@ public class Grabbable : MonoBehaviour
             if(att.player != null && att.isGrabbing && !att.isAttached)
             {
                 att.isAttached = true;
+                this.transform.position += Vector3.up * 0.5f;                
                 att.joint = this.gameObject.AddComponent<FixedJoint>();
                 att.joint.connectedBody = att.player.GetComponent<Rigidbody>();
                 
