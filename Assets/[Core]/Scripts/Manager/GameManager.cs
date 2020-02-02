@@ -4,9 +4,17 @@ using UnityEngine;
 
 public class GameManager : SingletonMonoBehaviour<GameManager>
 {
+    [System.Serializable]
+    public class PlayerSpawnPoint
+    {
+        public Transform transform;
+        public Color Color;
+    }
+
     public int timeToPair = 15;
     public float timeToPairRemaining = 15.0f;
 
+    public PlayerSpawnPoint[] SpawnPoints;
 
     // Start is called before the first frame update
     void Start()

@@ -94,8 +94,9 @@ namespace Core
                 {                    
                     if (_requestingToGrab)
                     {
-                        grabbable = collision.transform.GetComponent<Grabbable>();
-                        grabbable.TryGrab(_player);
+                        var grabComponent = collision.transform.GetComponent<Grabbable>();
+                        if (grabComponent.TryGrab(_player))
+                            grabbable = grabComponent;
                     }
                 }
             }
@@ -163,7 +164,7 @@ namespace Core
             _velocity.y += gravity * Time.fixedDeltaTime;
 
 
-            var currentSpeed = grabbable == null ? speed : speedWhenGrabbing;
+            var currentSpeed = grabbable != null && !grabbable.AllPlayersConnect ?  speedWhenGrabbing : speed;
 
             if (!_inDash)
             {

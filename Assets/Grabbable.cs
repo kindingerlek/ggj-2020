@@ -55,31 +55,32 @@ public class Grabbable : MonoBehaviour
         
     }
 
-    public void TryGrab(PlayerInput player)
+    public bool TryGrab(PlayerInput player)
     {
         Debug.Log($"Player {player.playerIndex} try grab {this.name}");
         if (playerAttaches[0].player != null && playerAttaches[1].player != null)
-            return;
+            return false;
 
         if (!playersIndexes.Contains(player.playerIndex))
-            return;
+            return false;
 
 
         var id = playerAttaches[0].player == null ? playersIndexes[0] : playersIndexes[1];
 
         playerAttaches[id].isGrabbing = true;
         playerAttaches[id].player = player;
+        return true;
     }
 
-    public void CancelGrab(PlayerInput player)
+    public bool CancelGrab(PlayerInput player)
     {
         Debug.Log($"Player {player.playerIndex} release object {this.name}");
 
         if (playerAttaches[0].player == null && playerAttaches[1].player == null)
-            return;
+            return false;
 
         if (!playersIndexes.Contains(player.playerIndex))
-            return;
+            return false;
 
 
         var id = playerAttaches[0].player != null ? playersIndexes[0] : playersIndexes[1];
@@ -87,6 +88,15 @@ public class Grabbable : MonoBehaviour
         playerAttaches[id].isAttached = false;
         playerAttaches[id].isGrabbing = false;
         playerAttaches[id].player = null;
+        return true;
+    }
+
+    public bool AllPlayersConnect
+    {
+        get
+        {
+            return playerAttaches[0].player != null && playerAttaches[1].player != null; 
+        }
     }
 
 }

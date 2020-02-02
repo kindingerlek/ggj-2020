@@ -25,7 +25,7 @@ namespace Core.Input
                     ""type"": ""Value"",
                     ""id"": ""98698bfa-561d-4bf5-8710-3490ecce8cf8"",
                     ""expectedControlType"": ""Vector2"",
-                    ""processors"": ""NormalizeVector2,StickDeadzone(min=0.225)"",
+                    ""processors"": ""NormalizeVector2,StickDeadzone(min=0.35)"",
                     ""interactions"": """"
                 },
                 {
