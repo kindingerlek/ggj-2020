@@ -22,6 +22,7 @@ namespace Core
         [Header("MOVEMENT")]
         [SerializeField] private float deccl = 15f;
         [SerializeField] private float speed = 8f;
+        [SerializeField] private float speedWhenGrabbing = 2f;
         [SerializeField] private float jumpHeight = 1f;
         [SerializeField] private float dashDistance = 5f;
         [SerializeField] private float dashSpeedMultiplier;
@@ -33,6 +34,8 @@ namespace Core
         private Vector3 _moveDirection;
         private Vector3 _velocity;
 
+        private Grabbable grabbable;
+
         // COMPONENTS
         private Animator _animator;
         private PlayerInput _player;
@@ -41,6 +44,7 @@ namespace Core
         private bool _isJumping;
         private bool _inDash;
         private bool _recoveringFromDash;
+        private bool _requestingToGrab;
 
 
         #region Properties
@@ -79,10 +83,28 @@ namespace Core
         {
             Debug.Log("Device Regained");
         }
-
+        
         private void OnCollisionStay(Collision collision)
         {
             _isGrounded = true;
+
+            if(collision.transform.tag == "Grabbable")
+            {
+                if (grabbable == null)
+                {                    
+                    if (_requestingToGrab)
+                    {
+                        grabbable = collision.transform.GetComponent<Grabbable>();
+                        grabbable.TryGrab(_player);
+                    }
+                }
+            }
+        }
+
+
+        private void OnGrab(InputValue value)
+        {
+            _requestingToGrab = value.isPressed;
         }
 
         private void OnMove(InputValue value)
@@ -119,6 +141,12 @@ namespace Core
         {
             DebugDraw.Line(transform.position, transform.position + _moveDirection).Color = Color.magenta;
             DebugDraw.Line(transform.position, transform.position + _velocity.normalized).Color = Color.cyan;
+
+            if (grabbable != null && !_requestingToGrab)
+            {
+                grabbable.CancelGrab(_player);
+                grabbable = null;
+            }
         }
 
         // Update is called once per frame
@@ -135,12 +163,14 @@ namespace Core
             _velocity.y += gravity * Time.fixedDeltaTime;
 
 
+            var currentSpeed = grabbable == null ? speed : speedWhenGrabbing;
+
             if (!_inDash)
             {
                 if (_moveDirection != Vector3.zero)
                 {
-                    _velocity.x = (_moveDirection * speed).x;
-                    _velocity.z = (_moveDirection * speed).z;
+                    _velocity.x = (_moveDirection * currentSpeed).x;
+                    _velocity.z = (_moveDirection * currentSpeed).z;
                 }
                 else
                 {
@@ -149,9 +179,9 @@ namespace Core
 
                 }
 
-                if (!_inDash && xzVel.magnitude >= speed)
+                if (!_inDash && xzVel.magnitude >= currentSpeed)
                 {
-                    xzVel = xzVel.normalized * speed;
+                    xzVel = xzVel.normalized * currentSpeed;
                     xzVel.y = _velocity.y;
                     _velocity = xzVel;
                 }

@@ -75,6 +75,17 @@ namespace Tools.DebugDraw
             pool = new List<Drawable>();
         }
 
+        public void Update()
+        {
+            foreach (var drawableElement in pool)
+            {
+                if (!drawableElement.Active)
+                    continue;
+
+                drawableElement.Update();
+            }
+        }
+
         static T Get<T>()
         {
             if(instance == null)

@@ -51,6 +51,14 @@ namespace Core.Input
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Grab"",
+                    ""type"": ""Value"",
+                    ""id"": ""060462eb-2b79-43a1-85ed-8b1fc169ee0f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -167,7 +175,7 @@ namespace Core.Input
                 {
                     ""name"": """",
                     ""id"": ""c8b64c08-40d5-4991-ae99-c9e48d29acc5"",
-                    ""path"": ""<Keyboard>/leftShift"",
+                    ""path"": ""<Keyboard>/leftAlt"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -194,6 +202,28 @@ namespace Core.Input
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6ca30685-7cfd-4640-ae3b-905bf723ce02"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Grab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b088e0b4-9d5d-463f-b1e0-c0c79fd3bdf0"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Grab"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -372,6 +402,7 @@ namespace Core.Input
             m_Gameplay_Jump = m_Gameplay.FindAction("Jump", throwIfNotFound: true);
             m_Gameplay_Dash = m_Gameplay.FindAction("Dash", throwIfNotFound: true);
             m_Gameplay_Look = m_Gameplay.FindAction("Look", throwIfNotFound: true);
+            m_Gameplay_Grab = m_Gameplay.FindAction("Grab", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Confirm = m_UI.FindAction("Confirm", throwIfNotFound: true);
@@ -430,6 +461,7 @@ namespace Core.Input
         private readonly InputAction m_Gameplay_Jump;
         private readonly InputAction m_Gameplay_Dash;
         private readonly InputAction m_Gameplay_Look;
+        private readonly InputAction m_Gameplay_Grab;
         public struct GameplayActions
         {
             private @PlayerControls m_Wrapper;
@@ -438,6 +470,7 @@ namespace Core.Input
             public InputAction @Jump => m_Wrapper.m_Gameplay_Jump;
             public InputAction @Dash => m_Wrapper.m_Gameplay_Dash;
             public InputAction @Look => m_Wrapper.m_Gameplay_Look;
+            public InputAction @Grab => m_Wrapper.m_Gameplay_Grab;
             public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -459,6 +492,9 @@ namespace Core.Input
                     @Look.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLook;
                     @Look.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLook;
                     @Look.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLook;
+                    @Grab.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnGrab;
+                    @Grab.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnGrab;
+                    @Grab.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnGrab;
                 }
                 m_Wrapper.m_GameplayActionsCallbackInterface = instance;
                 if (instance != null)
@@ -475,6 +511,9 @@ namespace Core.Input
                     @Look.started += instance.OnLook;
                     @Look.performed += instance.OnLook;
                     @Look.canceled += instance.OnLook;
+                    @Grab.started += instance.OnGrab;
+                    @Grab.performed += instance.OnGrab;
+                    @Grab.canceled += instance.OnGrab;
                 }
             }
         }
@@ -534,6 +573,7 @@ namespace Core.Input
             void OnJump(InputAction.CallbackContext context);
             void OnDash(InputAction.CallbackContext context);
             void OnLook(InputAction.CallbackContext context);
+            void OnGrab(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {
