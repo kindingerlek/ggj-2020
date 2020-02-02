@@ -25,7 +25,8 @@ public class FollowPlayers : MonoBehaviour
 
     private void LateUpdate()
     {
-        Move();
+        UpdateList();
+        //Move();
         Zoom();
     }
 
@@ -38,6 +39,29 @@ public class FollowPlayers : MonoBehaviour
         transform.position = Vector3.SmoothDamp(transform.position, newPos, ref velocity, smoothTime);
 
 
+    }
+    private void UpdateList()
+    {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        GameObject[] objects = GameObject.FindGameObjectsWithTag("Grabbable");
+        GameObject[] anchors = GameObject.FindGameObjectsWithTag("archor_point");
+
+        this.targets = new List<Transform>();
+
+        foreach (GameObject player in players)
+        {
+            this.targets.Add(player.transform);
+        }
+
+        foreach (GameObject obj in objects)
+        {
+            this.targets.Add(obj.transform);
+        }
+
+        foreach (GameObject obj in anchors)
+        {
+            this.targets.Add(obj.transform);
+        }
     }
 
     private void Zoom()
