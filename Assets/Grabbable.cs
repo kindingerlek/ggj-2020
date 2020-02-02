@@ -15,7 +15,7 @@ public class Grabbable : MonoBehaviour
     }
 
     private playerAttach[] playerAttaches = new playerAttach[2];
-    private int[] playersIndexes = { 0, 3 };
+    public int[] playersIndexes = { 0, 3 };
 
     // Start is called before the first frame update
     void Start()
@@ -71,7 +71,7 @@ public class Grabbable : MonoBehaviour
             return false;
 
 
-        var id = playerAttaches[0].player == null ? playersIndexes[0] : playersIndexes[1];
+        var id = playerAttaches[0].player == null ? 0 : 1;
 
         playerAttaches[id].isGrabbing = true;
         playerAttaches[id].player = player;
@@ -89,7 +89,7 @@ public class Grabbable : MonoBehaviour
             return false;
 
 
-        var id = playerAttaches[0].player != null ? playersIndexes[0] : playersIndexes[1];
+        var id = playerAttaches[0].player != null ? 0 : 1;
 
         playerAttaches[id].isAttached = false;
         playerAttaches[id].isGrabbing = false;

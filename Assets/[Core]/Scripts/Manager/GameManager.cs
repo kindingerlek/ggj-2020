@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Utils.Collection;
 
 public class GameManager : SingletonMonoBehaviour<GameManager>
 {
@@ -13,14 +15,38 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     public int timeToPair = 15;
     public float timeToPairRemaining = 15.0f;
+    public GameObject prefabBall;
 
     public PlayerSpawnPoint[] playerData;
-    
+
+
+    private GameObject[] Balls = new GameObject[4];
+
 
     // Start is called before the first frame update
     void Start()
     {
         Debug.Log("Start");
+
+        int[] pairs = Enumerable.Range(0, 4).Shuffle().ToArray();
+
+        for (int i = 0; i < Balls.Length; i++)
+        {
+            Balls[i] = Instantiate(prefabBall);
+            Balls[i].transform.position = GetNewSpawnBallPosition();
+            Balls[i].GetComponent<Grabbable>().playersIndexes = new int[] { i, (int) Mathf.Repeat(i+1,4) };
+
+        }
+    }
+
+    public Vector3 GetNewSpawnBallPosition()
+    {
+        var randomPos = Random.insideUnitCircle * 9;
+
+        if (randomPos.magnitude < 2f)
+            randomPos = randomPos.normalized * 2f;
+
+        return new Vector3(randomPos.x, 5f, randomPos.y);
     }
 
     // Update is called once per frame
