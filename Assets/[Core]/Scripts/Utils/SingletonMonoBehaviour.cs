@@ -97,7 +97,7 @@ public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : Single
     static SingletonMonoBehaviour()
     {
         Lazy = true;
-        FindInactive = true;
+        FindInactive = false;
         Persist = false;
         DestroyOthers = true;
     }
