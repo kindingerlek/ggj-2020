@@ -29,6 +29,7 @@ Transform:
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children:
   - {fileID: 6175509380674941030}
+  - {fileID: 3624505270245725739}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -44,6 +45,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94ca4815bda3ab546b5b5668ae90cf1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1316779099488040425
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3624505270245725739}
+  - component: {fileID: 9198519888893070912}
+  m_Layer: 0
+  m_Name: Trigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3624505270245725739
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1316779099488040425}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 321622196262305312}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &9198519888893070912
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1316779099488040425}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.030444477, y: 0.030444479, z: 0.016050238}
+  m_Center: {x: -0.000000005960464, y: -0.0000000047683715, z: -0.016068581}
 --- !u!1 &3791537993589557762
 GameObject:
   m_ObjectHideFlags: 0
@@ -57,7 +102,6 @@ GameObject:
   - component: {fileID: 6981455382503844628}
   - component: {fileID: 1326346555155259462}
   - component: {fileID: 6731137780937799508}
-  - component: {fileID: 6678881056474380463}
   m_Layer: 9
   m_Name: Arena_Fosso
   m_TagString: Untagged
@@ -153,16 +197,3 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.02, y: 0.020000001, z: 0.02}
   m_Center: {x: -0.000000005960464, y: -0.000000005364418, z: -0.010359762}
---- !u!65 &6678881056474380463
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3791537993589557762}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.030444477, y: 0.030444479, z: 0.016050238}
-  m_Center: {x: -0.000000005960464, y: -0.0000000047683715, z: -0.016068581}

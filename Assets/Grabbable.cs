@@ -39,6 +39,7 @@ public class Grabbable : MonoBehaviour
             if(att.player != null && att.isGrabbing && !att.isAttached)
             {
                 att.isAttached = true;
+                this.transform.position += Vector3.up * 0.5f;                
                 att.joint = this.gameObject.AddComponent<FixedJoint>();
                 att.joint.connectedBody = att.player.GetComponent<Rigidbody>();
                 

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 798087693987476866}
   - component: {fileID: 7328152593909494099}
   - component: {fileID: 3121691589456535291}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Ball
   m_TagString: Grabbable
   m_Icon: {fileID: 0}
@@ -139,6 +139,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: bola
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: f6e1b91f78936554d8b5e73da7827659,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f6e1b91f78936554d8b5e73da7827659, type: 3}
