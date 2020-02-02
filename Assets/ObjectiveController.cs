@@ -23,6 +23,15 @@ public class ObjectiveController : MonoBehaviour
         if (other.transform.tag != "Grabbable")
             return;
 
+        var grabblable = other.GetComponent<Grabbable>();
+
+        int points = grabblable.FirstPlayerCarried && grabblable.SecondPlayerCarried ? 3 : 1;
+
+        if(grabblable.FirstPlayerCarried)
+            GameManager.Instance.scores[grabblable.playersIndexes[0]] += points;
+        
+        if(grabblable.SecondPlayerCarried)
+            GameManager.Instance.scores[grabblable.playersIndexes[1]] += points;
 
         Debug.Log("ÉEEEE GOOOOOOOLLL!!!!");        
         other.GetComponent<Grabbable>().Respawn();

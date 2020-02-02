@@ -35,6 +35,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
 
     private int r;
+    internal int[] scores = new int[4];
 
 
     // Start is called before the first frame update
@@ -64,7 +65,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     // Update is called once per frame
     void Update()
     {
-
         UpdateTimeToPair();
     }
 

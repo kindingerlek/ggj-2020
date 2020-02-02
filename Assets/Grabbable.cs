@@ -10,6 +10,7 @@ public class Grabbable : MonoBehaviour
     {
         public bool isGrabbing;
         public bool isAttached;
+        public float lastTouchTime;
         public Joint joint;
         public PlayerInput player;
     }
@@ -20,6 +21,9 @@ public class Grabbable : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        playerAttaches[0].lastTouchTime = float.MinValue;
+        playerAttaches[1].lastTouchTime = float.MinValue;
+
         Respawn();
     }
 
@@ -49,6 +53,7 @@ public class Grabbable : MonoBehaviour
                 att.isAttached = false;
                 Destroy(att.joint);
                 att.joint = null;
+                att.lastTouchTime = Time.time;
             }
 
             playerAttaches[i] = att;
@@ -58,7 +63,7 @@ public class Grabbable : MonoBehaviour
 
     public bool TryGrab(PlayerInput player)
     {
-        Debug.Log($"Player {player.playerIndex} try grab {this.name}");
+        //Debug.Log($"Player {player.playerIndex} try grab {this.name}");
         if (playerAttaches[0].player != null && playerAttaches[1].player != null)
             return false;
 
@@ -75,7 +80,7 @@ public class Grabbable : MonoBehaviour
 
     public bool CancelGrab(PlayerInput player)
     {
-        Debug.Log($"Player {player.playerIndex} release object {this.name}");
+        //Debug.Log($"Player {player.playerIndex} release object {this.name}");
 
         if (playerAttaches[0].player == null && playerAttaches[1].player == null)
             return false;
@@ -114,9 +119,24 @@ public class Grabbable : MonoBehaviour
         mat_1.SetColor("_BaseColor", GameManager.Instance.playerData[playersIndexes[0]].Color);
         mat_2.SetColor("_BaseColor", GameManager.Instance.playerData[playersIndexes[1]].Color);
 
+        Destroy(playerAttaches[0].joint);
+        Destroy(playerAttaches[1].joint);
+
+        playerAttaches[0].joint = null;
+        playerAttaches[1].joint = null;
+
 
         transform.position = new Vector3(randomPos.x, 5f, randomPos.y);
         GetComponent<Rigidbody>().velocity = Vector3.zero;
         return ;
+    }
+
+    public bool FirstPlayerCarried
+    {
+        get => Time.time - playerAttaches[0].lastTouchTime <= 5f;
+    }
+    public bool SecondPlayerCarried
+    {
+        get => Time.time - playerAttaches[1].lastTouchTime <= 5f;
     }
 }
