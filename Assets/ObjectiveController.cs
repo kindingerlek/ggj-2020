@@ -5,6 +5,9 @@ using UnityEngine;
 public class ObjectiveController : MonoBehaviour
 {
     public new Collider collider;
+    public AudioClip destroySound;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -22,7 +25,7 @@ public class ObjectiveController : MonoBehaviour
     {
         if (other.transform.tag != "Grabbable")
             return;
-
+        Camera.main.GetComponent<AudioSource>().PlayOneShot(destroySound);
         var grabblable = other.GetComponent<Grabbable>();
 
         int points = grabblable.FirstPlayerCarried && grabblable.SecondPlayerCarried ? 3 : 1;

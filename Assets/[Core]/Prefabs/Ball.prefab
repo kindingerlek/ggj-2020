@@ -46,6 +46,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e08e73b8b5010d34aa58cff431058089, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  destroySound: {fileID: 8300000, guid: 838207504270ac248b3ad3b03f1f0300, type: 3}
+  destroy: {fileID: 0}
+  playersIndexes: 0000000003000000
 --- !u!135 &3121691589456535291
 SphereCollider:
   m_ObjectHideFlags: 0

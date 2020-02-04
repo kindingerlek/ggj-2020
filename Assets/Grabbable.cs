@@ -15,6 +15,8 @@ public class Grabbable : MonoBehaviour
         public PlayerInput player;
     }
 
+    public AudioSource destroy;
+
     private playerAttach[] playerAttaches = new playerAttach[2];
     public int[] playersIndexes = { 0, 3 };
 
