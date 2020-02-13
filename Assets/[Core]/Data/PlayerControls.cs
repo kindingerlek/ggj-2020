@@ -10,7 +10,7 @@ namespace Core.Input
 {
     public class @PlayerControls : IInputActionCollection, IDisposable
     {
-        private InputActionAsset asset;
+        public InputActionAsset asset { get; }
         public @PlayerControls()
         {
             asset = InputActionAsset.FromJson(@"{
@@ -25,7 +25,7 @@ namespace Core.Input
                     ""type"": ""Value"",
                     ""id"": ""98698bfa-561d-4bf5-8710-3490ecce8cf8"",
                     ""expectedControlType"": ""Vector2"",
-                    ""processors"": ""NormalizeVector2"",
+                    ""processors"": ""NormalizeVector2,StickDeadzone(min=0.35)"",
                     ""interactions"": """"
                 },
                 {
@@ -51,6 +51,14 @@ namespace Core.Input
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Grab"",
+                    ""type"": ""Value"",
+                    ""id"": ""060462eb-2b79-43a1-85ed-8b1fc169ee0f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -59,7 +67,7 @@ namespace Core.Input
                     ""id"": ""b5bac7ba-8825-4e31-aa5c-902b9b3361c1"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
-                    ""processors"": ""NormalizeVector2"",
+                    ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": true,
@@ -71,7 +79,7 @@ namespace Core.Input
                     ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -82,7 +90,7 @@ namespace Core.Input
                     ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -93,7 +101,7 @@ namespace Core.Input
                     ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -104,7 +112,7 @@ namespace Core.Input
                     ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -114,8 +122,8 @@ namespace Core.Input
                     ""id"": ""b9eccf95-dbfc-4709-af4e-b18fe08bb5b1"",
                     ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
-                    ""processors"": ""NormalizeVector2"",
-                    ""groups"": ""GamePad"",
+                    ""processors"": """",
+                    ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -126,7 +134,7 @@ namespace Core.Input
                     ""path"": ""<Gamepad>/dpad"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""GamePad"",
+                    ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -137,7 +145,7 @@ namespace Core.Input
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": """",
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -148,7 +156,7 @@ namespace Core.Input
                     ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""GamePad"",
+                    ""groups"": """",
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -159,7 +167,7 @@ namespace Core.Input
                     ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""GamePad"",
+                    ""groups"": """",
                     ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -167,10 +175,10 @@ namespace Core.Input
                 {
                     ""name"": """",
                     ""id"": ""c8b64c08-40d5-4991-ae99-c9e48d29acc5"",
-                    ""path"": ""<Keyboard>/leftShift"",
+                    ""path"": ""<Keyboard>/leftAlt"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": """",
                     ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -181,7 +189,7 @@ namespace Core.Input
                     ""path"": ""<Mouse>/delta"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": """",
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -192,8 +200,30 @@ namespace Core.Input
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""GamePad"",
+                    ""groups"": """",
                     ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6ca30685-7cfd-4640-ae3b-905bf723ce02"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Grab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b088e0b4-9d5d-463f-b1e0-c0c79fd3bdf0"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Grab"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -235,7 +265,7 @@ namespace Core.Input
                     ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""GamePad"",
+                    ""groups"": """",
                     ""action"": ""Confirm"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -246,7 +276,7 @@ namespace Core.Input
                     ""path"": ""<Keyboard>/enter"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": """",
                     ""action"": ""Confirm"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -257,7 +287,7 @@ namespace Core.Input
                     ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""GamePad"",
+                    ""groups"": """",
                     ""action"": ""Cancel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -268,7 +298,7 @@ namespace Core.Input
                     ""path"": ""<DualShockGamepad>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""GamePad"",
+                    ""groups"": """",
                     ""action"": ""Cancel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -279,7 +309,7 @@ namespace Core.Input
                     ""path"": ""<Keyboard>/backspace"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": """",
                     ""action"": ""Cancel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -290,7 +320,7 @@ namespace Core.Input
                     ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": """",
                     ""action"": ""Cancel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -301,7 +331,7 @@ namespace Core.Input
                     ""path"": ""<Gamepad>/dpad"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""GamePad"",
+                    ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -323,7 +353,7 @@ namespace Core.Input
                     ""path"": ""<Keyboard>/upArrow"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -334,7 +364,7 @@ namespace Core.Input
                     ""path"": ""<Keyboard>/downArrow"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -345,7 +375,7 @@ namespace Core.Input
                     ""path"": ""<Keyboard>/leftArrow"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -356,7 +386,7 @@ namespace Core.Input
                     ""path"": ""<Keyboard>/rightArrow"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -364,40 +394,7 @@ namespace Core.Input
             ]
         }
     ],
-    ""controlSchemes"": [
-        {
-            ""name"": ""Keyboard&Mouse"",
-            ""bindingGroup"": ""Keyboard&Mouse"",
-            ""devices"": [
-                {
-                    ""devicePath"": ""<Keyboard>"",
-                    ""isOptional"": false,
-                    ""isOR"": false
-                },
-                {
-                    ""devicePath"": ""<Mouse>"",
-                    ""isOptional"": false,
-                    ""isOR"": false
-                }
-            ]
-        },
-        {
-            ""name"": ""GamePad"",
-            ""bindingGroup"": ""GamePad"",
-            ""devices"": [
-                {
-                    ""devicePath"": ""<Gamepad>"",
-                    ""isOptional"": false,
-                    ""isOR"": false
-                },
-                {
-                    ""devicePath"": ""<HID::ZhiXu Tech. GamePad>"",
-                    ""isOptional"": false,
-                    ""isOR"": false
-                }
-            ]
-        }
-    ]
+    ""controlSchemes"": []
 }");
             // Gameplay
             m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
@@ -405,6 +402,7 @@ namespace Core.Input
             m_Gameplay_Jump = m_Gameplay.FindAction("Jump", throwIfNotFound: true);
             m_Gameplay_Dash = m_Gameplay.FindAction("Dash", throwIfNotFound: true);
             m_Gameplay_Look = m_Gameplay.FindAction("Look", throwIfNotFound: true);
+            m_Gameplay_Grab = m_Gameplay.FindAction("Grab", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Confirm = m_UI.FindAction("Confirm", throwIfNotFound: true);
@@ -463,6 +461,7 @@ namespace Core.Input
         private readonly InputAction m_Gameplay_Jump;
         private readonly InputAction m_Gameplay_Dash;
         private readonly InputAction m_Gameplay_Look;
+        private readonly InputAction m_Gameplay_Grab;
         public struct GameplayActions
         {
             private @PlayerControls m_Wrapper;
@@ -471,6 +470,7 @@ namespace Core.Input
             public InputAction @Jump => m_Wrapper.m_Gameplay_Jump;
             public InputAction @Dash => m_Wrapper.m_Gameplay_Dash;
             public InputAction @Look => m_Wrapper.m_Gameplay_Look;
+            public InputAction @Grab => m_Wrapper.m_Gameplay_Grab;
             public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -492,6 +492,9 @@ namespace Core.Input
                     @Look.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLook;
                     @Look.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLook;
                     @Look.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLook;
+                    @Grab.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnGrab;
+                    @Grab.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnGrab;
+                    @Grab.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnGrab;
                 }
                 m_Wrapper.m_GameplayActionsCallbackInterface = instance;
                 if (instance != null)
@@ -508,6 +511,9 @@ namespace Core.Input
                     @Look.started += instance.OnLook;
                     @Look.performed += instance.OnLook;
                     @Look.canceled += instance.OnLook;
+                    @Grab.started += instance.OnGrab;
+                    @Grab.performed += instance.OnGrab;
+                    @Grab.canceled += instance.OnGrab;
                 }
             }
         }
@@ -561,30 +567,13 @@ namespace Core.Input
             }
         }
         public UIActions @UI => new UIActions(this);
-        private int m_KeyboardMouseSchemeIndex = -1;
-        public InputControlScheme KeyboardMouseScheme
-        {
-            get
-            {
-                if (m_KeyboardMouseSchemeIndex == -1) m_KeyboardMouseSchemeIndex = asset.FindControlSchemeIndex("Keyboard&Mouse");
-                return asset.controlSchemes[m_KeyboardMouseSchemeIndex];
-            }
-        }
-        private int m_GamePadSchemeIndex = -1;
-        public InputControlScheme GamePadScheme
-        {
-            get
-            {
-                if (m_GamePadSchemeIndex == -1) m_GamePadSchemeIndex = asset.FindControlSchemeIndex("GamePad");
-                return asset.controlSchemes[m_GamePadSchemeIndex];
-            }
-        }
         public interface IGameplayActions
         {
             void OnMove(InputAction.CallbackContext context);
             void OnJump(InputAction.CallbackContext context);
             void OnDash(InputAction.CallbackContext context);
             void OnLook(InputAction.CallbackContext context);
+            void OnGrab(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {
